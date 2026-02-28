@@ -12,5 +12,7 @@ public interface CampaignRepository {
 
     Optional<Campaign> findById(UUID id);
 
-    List<Campaign> findActiveCampaigns();
+    List<Campaign> findActiveCampaigns(int page, int size);
+
+    List<Campaign> find(int page, int size);
 }

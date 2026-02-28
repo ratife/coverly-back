@@ -1,4 +1,4 @@
-package mg.tife.ads.infrastructure.model;
+package mg.tife.ads.infrastructure.entity;
 
 import jakarta.persistence.*;
 import java.util.UUID;

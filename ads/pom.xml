@@ -4,26 +4,52 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>mg.tife</groupId>
-        <artifactId>coverly-back</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
+    <packaging>pom</packaging>
+    <groupId>mg.tife</groupId>
     <artifactId>ads</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <version-app>1.0-SNAPSHOT</version-app>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>mg.tife</groupId>
+                <artifactId>ads-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mg.tife</groupId>
+                <artifactId>ads-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mg.tife</groupId>
+                <artifactId>ads-infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mg.tife</groupId>
+                <artifactId>ads-presentation</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>domain</module>
+        <module>application</module>
+        <module>infrastructure</module>
+        <module>presentation</module>
+    </modules>
 
 </project>
