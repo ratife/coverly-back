@@ -17,4 +17,8 @@ public class CommissionPolicy {
     public BigDecimal publisherShare(BigDecimal amount) {
         return amount.subtract(platformShare(amount));
     }
+
+    public BigDecimal getPlatformRate() {
+        return platformRate;
+    }
 }

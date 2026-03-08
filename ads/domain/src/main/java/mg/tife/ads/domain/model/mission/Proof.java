@@ -18,4 +18,9 @@ public class Proof {
     public String getUrl() {
         return url;
     }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
 }
+

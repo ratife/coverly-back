@@ -19,6 +19,7 @@ public class CreateCampaignUseCase {
     }
 
     public UUID execute(Campaign campaign) {
+        System.out.println("Executing CreateCampaignUseCase with campaign: " + campaign);
         Campaign saved = campaignRepository.save(campaign);
         eventPublisher.publishCampaignCreated(saved);
         return saved.getId();

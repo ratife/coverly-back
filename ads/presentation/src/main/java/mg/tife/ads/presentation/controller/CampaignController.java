@@ -1,13 +1,18 @@
 package mg.tife.ads.presentation.controller;
 
-import mg.tife.ads.application.usecase.*;
+import mg.tife.ads.application.dto.PaginateRequest;
 import mg.tife.ads.domain.model.campaign.Campaign;
 import mg.tife.ads.presentation.adapter.*;
+import mg.tife.ads.presentation.dto.campaign.mapper.CampaignDtoMapper;
+import mg.tife.ads.presentation.dto.campaign.request.ConsumeBudgetRequest;
+import mg.tife.ads.presentation.dto.campaign.request.CreateCampaignRequest;
+import mg.tife.ads.presentation.dto.campaign.response.CampaignResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -18,27 +23,32 @@ public class CampaignController {
     private final ConsumeBudgetAdapter consumeBudgetAdapter;
     private final CreateCampaignAdapter createCampaignAdapter;
     private final GenerateMissionsAdapter generateMissionsAdapter;
-    private final ListCampaignAdapter listCampaignAdapter;
     private final PauseCampaignAdapter pauseCampaignAdapter;
+    private final ListCampaignAdapter listCampaignAdapter;
+    private final GetCampaignAdapter getCampaignAdapter;
 
 
     CampaignController(ActivateCampaignAdapter activateCampaignAdapter,
                        ConsumeBudgetAdapter consumeBudgetAdapter,
                        CreateCampaignAdapter createCampaignAdapter,
                        GenerateMissionsAdapter generateMissionsAdapter,
+                       PauseCampaignAdapter pauseCampaignAdapter,
                        ListCampaignAdapter listCampaignAdapter,
-                       PauseCampaignAdapter pauseCampaignAdapter) {
+                       GetCampaignAdapter getCampaignAdapter) {
         this.activateCampaignAdapter = activateCampaignAdapter;
         this.consumeBudgetAdapter = consumeBudgetAdapter;
         this.createCampaignAdapter = createCampaignAdapter;
         this.generateMissionsAdapter = generateMissionsAdapter;
-        this.listCampaignAdapter = listCampaignAdapter;
         this.pauseCampaignAdapter = pauseCampaignAdapter;
+        this.listCampaignAdapter = listCampaignAdapter;
+        this.getCampaignAdapter = getCampaignAdapter;
     }
 
     @PostMapping
-    public ResponseEntity<UUID> createCampaign(@RequestBody Campaign campaign) {
+    public ResponseEntity<UUID> createCampaign(@RequestBody CreateCampaignRequest request) {
+        System.out.println("Received create campaign request: " + request);
         if (createCampaignAdapter == null) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        Campaign campaign = CampaignDtoMapper.INSTANCE.toDomain(request);
         UUID id = createCampaignAdapter.createCampaign(campaign);
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
@@ -58,9 +68,9 @@ public class CampaignController {
     }
 
     @PostMapping("/{id}/consume")
-    public ResponseEntity<Void> consume(@PathVariable UUID id, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Void> consume(@PathVariable UUID id, @RequestBody ConsumeBudgetRequest request) {
         if (consumeBudgetAdapter == null) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
-        consumeBudgetAdapter.consume(id, amount);
+        consumeBudgetAdapter.consume(id, request.amount());
         return ResponseEntity.noContent().build();
     }
 
@@ -72,7 +82,15 @@ public class CampaignController {
     }
 
     @GetMapping
-    public String test() {
-        return "ok";
+    public ResponseEntity<List<CampaignResponse>> getCampaigns(PaginateRequest request) {
+        List<CampaignResponse> camps = this.listCampaignAdapter.list(request);
+        System.out.println("Camps: " + camps.size());
+        return camps.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(camps);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CampaignResponse> getCampaign(UUID campaignId) {
+        Optional<CampaignResponse> res = this.getCampaignAdapter.get(campaignId);
+        return res.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(res.get());
     }
 }

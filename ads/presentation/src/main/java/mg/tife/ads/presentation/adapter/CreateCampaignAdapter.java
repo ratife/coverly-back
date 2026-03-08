@@ -1,12 +1,10 @@
 package mg.tife.ads.presentation.adapter;
 
-import mg.tife.ads.application.usecase.ActivateCampaignUseCase;
 import mg.tife.ads.application.usecase.CreateCampaignUseCase;
 import mg.tife.ads.domain.model.campaign.Campaign;
 import mg.tife.ads.domain.repository.CampaignRepository;
 import mg.tife.ads.domain.repository.EventPublisher;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 
@@ -19,6 +17,7 @@ public class CreateCampaignAdapter {
     }
 
     public UUID createCampaign(Campaign campaign) {
+        System.out.println("CreateCampaignAdapter: creating campaign: " + campaign);
         return delegate.execute(campaign);
     }
 }

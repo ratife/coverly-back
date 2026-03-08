@@ -1,11 +1,17 @@
 package mg.tife.ads.infrastructure.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "missions")
-public class MissionEntity {
+public class MissionEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,30 +21,47 @@ public class MissionEntity {
     private UUID campaignId;
 
     @Column(nullable = false)
-    private String description;
+    private UUID publisherId;
 
-    // Getters and Setters
-    public UUID getId() {
-        return id;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MissionTypeEntity type;
+
+    @Column(nullable = false)
+    private BigDecimal price;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MissionStatusEntity status;
+
+    @Column
+    private String proofUrl;
+
+    @Column
+    private LocalDateTime proofSubmittedAt;
+
+    @Column(nullable = false)
+    private LocalDate deadline;
+
+    @Column
+    private LocalDateTime validatedAt;
+
+    public enum MissionTypeEntity {
+        POST,
+        STORY,
+        COVER,
+        VIDEO,
+        REEL
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getCampaignId() {
-        return campaignId;
-    }
-
-    public void setCampaignId(UUID campaignId) {
-        this.campaignId = campaignId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public enum MissionStatusEntity {
+        CREATED,
+        ACCEPTED,
+        IN_PROGRESS,
+        SUBMITTED,
+        VALIDATED,
+        REJECTED,
+        PAID,
+        CANCELLED
     }
 }

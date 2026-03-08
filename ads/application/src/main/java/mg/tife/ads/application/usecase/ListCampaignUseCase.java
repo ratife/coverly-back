@@ -16,7 +16,8 @@ public class ListCampaignUseCase {
     }
 
     public List<Campaign>  execute(PaginateRequest request) {
-        List<Campaign> campaigns = (List<Campaign>) campaignRepository.find(request.page(), request.size());
-        return campaigns;
+        List<Campaign> list = campaignRepository.find(request.page(), request.size());
+        System.out.println("list: " + list.size());
+        return list;
     }
 }

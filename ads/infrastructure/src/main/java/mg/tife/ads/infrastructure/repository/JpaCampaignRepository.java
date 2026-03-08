@@ -23,8 +23,10 @@ public class JpaCampaignRepository implements CampaignRepository {
 
     @Override
     public Campaign save(Campaign campaign) {
+        System.out.println("Saving campaign: " + campaign);
         CampaignEntity entity = CampaignMapper.INSTANCE.toEntity(campaign);
         CampaignEntity saved = delegate.save(entity);
+        System.out.println("Saved campaign with ID: " + saved.getId());
         return CampaignMapper.INSTANCE.toDomain(saved);
     }
 
