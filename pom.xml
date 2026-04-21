@@ -8,6 +8,7 @@
     <artifactId>coverly-back</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>ads</module>
         <module>payment</module>
@@ -17,6 +18,10 @@
         <module>ads/application</module>
         <module>ads/presentation</module>
         <module>ads/infrastructure</module>
+        <module>media/domain</module>
+        <module>media/application</module>
+        <module>media/presentation</module>
+        <module>media/infrastructure</module>
     </modules>
 
     <properties>

@@ -1,9 +1,10 @@
 package mg.tife.ads.infrastructure.repository;
 
 import mg.tife.ads.domain.model.campaign.Campaign;
-import mg.tife.ads.domain.model.campaign.CampaignStatus;
 import mg.tife.ads.domain.repository.CampaignRepository;
-import mg.tife.ads.infrastructure.model.CampaignEntity;
+import mg.tife.ads.infrastructure.mapper.CampaignMapper;
+import mg.tife.ads.infrastructure.entity.CampaignEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,42 +23,32 @@ public class JpaCampaignRepository implements CampaignRepository {
 
     @Override
     public Campaign save(Campaign campaign) {
-        CampaignEntity entity = toEntity(campaign);
+        System.out.println("Saving campaign: " + campaign);
+        CampaignEntity entity = CampaignMapper.INSTANCE.toEntity(campaign);
         CampaignEntity saved = delegate.save(entity);
-        return toDomain(saved);
+        System.out.println("Saved campaign with ID: " + saved.getId());
+        return CampaignMapper.INSTANCE.toDomain(saved);
     }
 
     @Override
     public Optional<Campaign> findById(UUID id) {
-        return delegate.findById(id).map(this::toDomain);
+        return delegate.findById(id).map(CampaignMapper.INSTANCE::toDomain);
     }
 
     @Override
-    public List<Campaign> findActiveCampaigns() {
-        return delegate.findByActiveTrue()
+    public List<Campaign> findActiveCampaigns(int page, int size) {
+        return delegate.findAll(Pageable.ofSize(size).withPage(page))
                 .stream()
-                .map(this::toDomain)
+                .filter(CampaignEntity::isActive)
+                .map(CampaignMapper.INSTANCE::toDomain)
                 .collect(Collectors.toList());
     }
 
-    private CampaignEntity toEntity(Campaign domain) {
-        CampaignEntity e = new CampaignEntity();
-        if (domain.getId() != null) {
-            e.setId(domain.getId());
-        }
-        e.setName(domain.getName());
-        // map status -> active flag (simple mapping)
-        e.setActive(CampaignStatus.ACTIVE.equals(domain.getStatus()));
-        return e;
-    }
-
-    private Campaign toDomain(CampaignEntity entity) {
-        // Creating a lightweight domain object. Some domain fields are not persisted in CampaignEntity
-        // so we set minimal values. Assumption: advertiserId unknown here and set to null.
-        Campaign c = new Campaign(null);
-        c.setId(entity.getId());
-        c.setName(entity.getName());
-        c.setStatus(entity.isActive() ? CampaignStatus.ACTIVE : CampaignStatus.DRAFT);
-        return c;
+    @Override
+    public List<Campaign> find(int page, int size) {
+        return delegate.findAll(Pageable.ofSize(size).withPage(page))
+                .stream()
+                .map(CampaignMapper.INSTANCE::toDomain)
+                .collect(Collectors.toList());
     }
 }

@@ -1,6 +1,6 @@
 package mg.tife.ads.infrastructure.repository;
 
-import mg.tife.ads.infrastructure.model.CampaignEntity;
+import mg.tife.ads.infrastructure.entity.CampaignEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

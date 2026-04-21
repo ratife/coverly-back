@@ -20,7 +20,6 @@ public class GenerateMissionsUseCase {
     }
 
     public void execute(UUID campaignId) {
-
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow();
         if (!campaign.isReady()) {

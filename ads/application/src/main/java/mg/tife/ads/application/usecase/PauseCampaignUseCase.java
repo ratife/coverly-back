@@ -22,5 +22,6 @@ public class PauseCampaignUseCase {
                 .orElseThrow();
         campaign.pause();
         campaignRepository.save(campaign);
+        eventPublisher.publishCampaignPaused();
     }
 }

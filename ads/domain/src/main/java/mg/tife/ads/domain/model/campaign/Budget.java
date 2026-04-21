@@ -25,4 +25,12 @@ public class Budget {
     public BigDecimal remaining() {
         return total.subtract(spent);
     }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public BigDecimal getSpent() {
+        return spent;
+    }
 }

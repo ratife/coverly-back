@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Data
 public class Campaign {
+
     private UUID id;
     private UUID advertiserId;
     private String name;
