@@ -25,4 +25,9 @@ public class SpringEventPublisher implements EventPublisher {
         System.out.println("active campagn");
         //publisher.publishEvent(new CampaignActivatedEvent(campaign));
     }
+
+    @Override
+    public void publishCampaignPaused() {
+        System.out.println("Pause campagn");
+    }
 }

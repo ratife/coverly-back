@@ -6,4 +6,6 @@ public interface EventPublisher {
    void publishCampaignCreated(Campaign campaign);
 
     void publishCampaignActivated(Campaign campaign);
+
+    void publishCampaignPaused();
 }

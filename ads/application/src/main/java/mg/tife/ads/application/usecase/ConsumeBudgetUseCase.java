@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class ConsumeBudgetUseCase {
 
-
     private final CampaignRepository campaignRepository;
     private final EventPublisher eventPublisher;
 
@@ -21,13 +20,10 @@ public class ConsumeBudgetUseCase {
         this.eventPublisher = eventPublisher;
     }
 
-
     public void execute(UUID campaignId, BigDecimal amount) {
         Campaign campaign = campaignRepository.findById(campaignId)
                 .orElseThrow();
-
         campaign.consumeBudget(amount);
-
         campaignRepository.save(campaign);
     }
 }
