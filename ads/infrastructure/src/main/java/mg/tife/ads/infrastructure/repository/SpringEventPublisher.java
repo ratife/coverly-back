@@ -3,9 +3,6 @@ package mg.tife.ads.infrastructure.repository;
 import lombok.RequiredArgsConstructor;
 import mg.tife.ads.domain.model.campaign.Campaign;
 import mg.tife.ads.domain.repository.EventPublisher;
-import mg.tife.ads.infrastructure.event.CampaignActivatedEvent;
-import mg.tife.ads.infrastructure.event.CampaignCreatedEvent;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,5 +26,10 @@ public class SpringEventPublisher implements EventPublisher {
     @Override
     public void publishCampaignPaused() {
         System.out.println("Pause campagn");
+    }
+
+    @Override
+    public void publishCampaignUpdated(Campaign old,Campaign newCamp) {
+        System.out.println("updated campagn");
     }
 }

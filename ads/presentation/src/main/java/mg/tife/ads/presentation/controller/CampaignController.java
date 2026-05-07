@@ -22,6 +22,7 @@ public class CampaignController {
     private final ActivateCampaignAdapter activateCampaignAdapter;
     private final ConsumeBudgetAdapter consumeBudgetAdapter;
     private final CreateCampaignAdapter createCampaignAdapter;
+    private final UpdateCampaignAdapter updateCampaignAdapter;
     private final GenerateMissionsAdapter generateMissionsAdapter;
     private final PauseCampaignAdapter pauseCampaignAdapter;
     private final ListCampaignAdapter listCampaignAdapter;
@@ -30,7 +31,7 @@ public class CampaignController {
 
     CampaignController(ActivateCampaignAdapter activateCampaignAdapter,
                        ConsumeBudgetAdapter consumeBudgetAdapter,
-                       CreateCampaignAdapter createCampaignAdapter,
+                       CreateCampaignAdapter createCampaignAdapter, UpdateCampaignAdapter updateCampaignAdapter,
                        GenerateMissionsAdapter generateMissionsAdapter,
                        PauseCampaignAdapter pauseCampaignAdapter,
                        ListCampaignAdapter listCampaignAdapter,
@@ -38,6 +39,7 @@ public class CampaignController {
         this.activateCampaignAdapter = activateCampaignAdapter;
         this.consumeBudgetAdapter = consumeBudgetAdapter;
         this.createCampaignAdapter = createCampaignAdapter;
+        this.updateCampaignAdapter = updateCampaignAdapter;
         this.generateMissionsAdapter = generateMissionsAdapter;
         this.pauseCampaignAdapter = pauseCampaignAdapter;
         this.listCampaignAdapter = listCampaignAdapter;
@@ -47,9 +49,16 @@ public class CampaignController {
     @PostMapping
     public ResponseEntity<UUID> createCampaign(@RequestBody CreateCampaignRequest request) {
         System.out.println("Received create campaign request: " + request);
-        if (createCampaignAdapter == null) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        if (createCampaignAdapter == null || updateCampaignAdapter == null)
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         Campaign campaign = CampaignDtoMapper.INSTANCE.toDomain(request);
-        UUID id = createCampaignAdapter.createCampaign(campaign);
+        UUID id;
+        if(request.id() != null) {
+            id = updateCampaignAdapter.updateCampaign(campaign);
+        }
+        else{
+            id = createCampaignAdapter.createCampaign(campaign);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(id);
     }
 
@@ -91,6 +100,6 @@ public class CampaignController {
     @GetMapping("/{id}")
     public ResponseEntity<CampaignResponse> getCampaign(UUID campaignId) {
         Optional<CampaignResponse> res = this.getCampaignAdapter.get(campaignId);
-        return res.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(res.get());
+        return res.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 }

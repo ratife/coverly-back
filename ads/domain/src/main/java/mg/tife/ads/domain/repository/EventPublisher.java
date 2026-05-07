@@ -8,4 +8,6 @@ public interface EventPublisher {
     void publishCampaignActivated(Campaign campaign);
 
     void publishCampaignPaused();
+
+    void publishCampaignUpdated(Campaign old,Campaign newCamp);
 }

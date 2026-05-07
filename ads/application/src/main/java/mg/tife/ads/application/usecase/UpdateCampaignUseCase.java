@@ -1,0 +1,27 @@
+package mg.tife.ads.application.usecase;
+import mg.tife.ads.domain.model.campaign.Campaign;
+import mg.tife.ads.domain.repository.CampaignRepository;
+import mg.tife.ads.domain.repository.EventPublisher;
+
+import java.util.UUID;
+
+public class UpdateCampaignUseCase {
+
+    private final CampaignRepository campaignRepository;
+    private final EventPublisher eventPublisher;
+
+    public UpdateCampaignUseCase(
+            CampaignRepository campRep,
+            EventPublisher eventPublisher
+    ) {
+        this.campaignRepository = campRep;
+        this.eventPublisher = eventPublisher;
+    }
+
+    public UUID execute(Campaign campaign) {
+        System.out.println("Executing CreateCampaignUseCase with campaign: " + campaign);
+        Campaign saved = campaignRepository.save(campaign);
+        eventPublisher.publishCampaignUpdated(campaign,saved);
+        return saved.getId();
+    }
+}
