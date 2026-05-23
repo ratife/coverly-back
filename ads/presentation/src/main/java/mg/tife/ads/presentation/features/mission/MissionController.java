@@ -1,13 +1,10 @@
 package mg.tife.ads.presentation.features.mission;
 
 import mg.tife.ads.domain.model.mission.Mission;
-import mg.tife.ads.presentation.features.mission.adapter.CreateMissionAdapter;
-import mg.tife.ads.presentation.features.mission.adapter.AcceptMissionAdapter;
-import mg.tife.ads.presentation.features.mission.adapter.SubmitProofAdapter;
-import mg.tife.ads.presentation.features.mission.adapter.ValidateMissionAdapter;
-import mg.tife.ads.presentation.features.mission.adapter.RejectMissionAdapter;
+import mg.tife.ads.presentation.features.mission.adapter.*;
 import mg.tife.ads.presentation.features.mission.dto.mapper.MissionDtoMapper;
 import mg.tife.ads.presentation.features.mission.dto.request.CreateMissionRequest;
+import mg.tife.ads.presentation.features.mission.dto.request.EngageMissionRequest;
 import mg.tife.ads.presentation.features.mission.dto.request.SubmitProofRequest;
 import mg.tife.ads.presentation.features.mission.dto.response.MissionResponse;
 import org.springframework.http.HttpStatus;
@@ -25,17 +22,19 @@ public class MissionController {
     private final SubmitProofAdapter submitProofAdapter;
     private final ValidateMissionAdapter validateMissionAdapter;
     private final RejectMissionAdapter rejectMissionAdapter;
+    private final EngageMissionAdapter engageMissionAdapter;
 
     public MissionController(CreateMissionAdapter createMissionAdapter,
                            AcceptMissionAdapter acceptMissionAdapter,
                            SubmitProofAdapter submitProofAdapter,
                            ValidateMissionAdapter validateMissionAdapter,
-                           RejectMissionAdapter rejectMissionAdapter) {
+                           RejectMissionAdapter rejectMissionAdapter, EngageMissionAdapter engageMissionAdapter) {
         this.createMissionAdapter = createMissionAdapter;
         this.acceptMissionAdapter = acceptMissionAdapter;
         this.submitProofAdapter = submitProofAdapter;
         this.validateMissionAdapter = validateMissionAdapter;
         this.rejectMissionAdapter = rejectMissionAdapter;
+        this.engageMissionAdapter = engageMissionAdapter;
     }
 
     @PostMapping
@@ -77,6 +76,12 @@ public class MissionController {
         MissionResponse response = MissionDtoMapper.INSTANCE.toResponse(mission);
         return ResponseEntity.ok(response);
     }
+
+
+    @PostMapping("/engage")
+    public ResponseEntity<UUID> engage(@RequestBody EngageMissionRequest engageRequest) {
+        if (engageMissionAdapter == null) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
+        UUID missionId = engageMissionAdapter.engage(engageRequest.missionId(),engageRequest.publisherId());
+        return ResponseEntity.ok(missionId);
+    }
 }
-
-
