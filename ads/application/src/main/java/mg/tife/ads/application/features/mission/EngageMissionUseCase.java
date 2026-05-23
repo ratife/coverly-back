@@ -22,7 +22,9 @@ public class EngageMissionUseCase {
         this.eventPublisher = eventPublisher;
     }
 
-    public UUID execute(Mission mission,UUID publisherId) {
+    public UUID execute(UUID missionId,UUID publisherId) {
+        Mission mission = missionRepository.findById(missionId)
+                .orElseThrow();
         logger.info("Executing EngageMissionUseCase with mission: " + mission);
         mission.setPublisherId(publisherId);
         mission.setStatus(MissionStatus.SUBMITTED);
