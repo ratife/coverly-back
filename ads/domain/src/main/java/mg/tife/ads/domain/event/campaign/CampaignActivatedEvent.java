@@ -1,9 +1,9 @@
 package mg.tife.ads.domain.event.campaign;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import mg.tife.ads.domain.model.campaign.Campaign;
 
-public record CampaignActivatedEvent(
-        UUID campaignId,
-        LocalDateTime occurredAt
-) {}
+public class CampaignActivatedEvent extends CampaignEvent {
+    public CampaignActivatedEvent(Campaign campaign) {
+        super(campaign);
+    }
+}

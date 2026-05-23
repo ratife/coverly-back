@@ -2,8 +2,8 @@ package mg.tife.ads.domain.event.campaign;
 
 import mg.tife.ads.domain.model.campaign.Campaign;
 
-public class CampaignCreatedEvent extends CampaignEvent{
-    public CampaignCreatedEvent(Campaign campaign) {
+public class CampaignPauseEvent extends  CampaignEvent{
+    public CampaignPauseEvent(Campaign campaign) {
         super(campaign);
     }
 }

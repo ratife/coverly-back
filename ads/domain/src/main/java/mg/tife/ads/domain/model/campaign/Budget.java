@@ -1,7 +1,10 @@
 package mg.tife.ads.domain.model.campaign;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class Budget {
 
     private final BigDecimal total;
@@ -26,11 +29,7 @@ public class Budget {
         return total.subtract(spent);
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public BigDecimal getSpent() {
-        return spent;
+    public boolean isEmptyBudget(){
+        return remaining().compareTo(BigDecimal.ZERO) <= 0;
     }
 }

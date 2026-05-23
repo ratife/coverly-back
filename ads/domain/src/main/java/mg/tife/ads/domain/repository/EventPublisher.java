@@ -1,13 +1,9 @@
 package mg.tife.ads.domain.repository;
 
-import mg.tife.ads.domain.model.campaign.Campaign;
+import mg.tife.ads.domain.event.campaign.CampaignEvent;
+import mg.tife.ads.domain.event.mission.MissionEvent;
 
 public interface EventPublisher {
-   void publishCampaignCreated(Campaign campaign);
-
-    void publishCampaignActivated(Campaign campaign);
-
-    void publishCampaignPaused();
-
-    void publishCampaignUpdated(Campaign old,Campaign newCamp);
+    void publishCampaignEvent(CampaignEvent event);
+    void publishMissionEvent(MissionEvent event);
 }

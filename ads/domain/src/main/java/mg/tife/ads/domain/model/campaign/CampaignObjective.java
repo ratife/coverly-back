@@ -1,8 +1,14 @@
 package mg.tife.ads.domain.model.campaign;
 
-public enum CampaignObjective {
-    BRAND_AWARENESS,
-    ENGAGEMENT,
-    CONVERSION,
-    TRAFFIC
+import lombok.Data;
+
+import java.util.UUID;
+
+@Data
+public class CampaignObjective {
+    private UUID id;
+    private Integer nbrVue;
+    private Integer nbrClick;
+    private Integer nbrReact;
+    private Integer nbrShare;
 }
